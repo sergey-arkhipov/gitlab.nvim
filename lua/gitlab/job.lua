@@ -55,10 +55,12 @@ M.run_job = function(endpoint, method, body, callback)
         end
       end, 0)
     end,
-    on_stderr = function()
-      vim.defer_fn(function()
-        u.notify("Could not run command!", vim.log.levels.ERROR)
-      end, 0)
+    on_stderr = function(err, data)
+      if err or data then
+        vim.defer_fn(function()
+          u.notify("Could not run command!", vim.log.levels.ERROR)
+        end, 0)
+      end
     end,
     on_exit = function(_, status)
       vim.defer_fn(function()
